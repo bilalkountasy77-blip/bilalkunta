@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bilal — Accessoiriste Cinéma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15171a;
+    --ink-2:#1c1f24;
+    --ink-3:#23262c;
+    --paper:#cdb995;
+    --paper-light:#e9dfc6;
+    --cream:#efe9dc;
+    --cream-dim:#a9a297;
+    --accent:#c1461f;
+    --accent-2:#5c6b5c;
+    --line:rgba(239,233,220,0.14);
+    --line-strong:rgba(239,233,220,0.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--cream);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:200;
+    opacity:0.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  h1,h2,h3,.display{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.18em;
+    color:var(--accent);
+    text-transform:uppercase;
+    font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--accent);display:inline-block;}
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(21,23,26,0.85);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1120px; margin:0 auto; padding:16px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Oswald'; font-weight:700; letter-spacing:0.05em; font-size:15px;
+  }
+  .logo .slate{
+    width:26px; height:20px; border:1.5px solid var(--cream); border-radius:2px; position:relative; flex:none;
+  }
+  .logo .slate::before{
+    content:""; position:absolute; top:-1.5px; left:-1.5px; right:-1.5px; height:6px;
+    background:repeating-linear-gradient(115deg, var(--cream) 0 3px, transparent 3px 6px);
+    border-bottom:1.5px solid var(--ink);
+  }
+  .navlinks{display:flex; gap:28px; font-size:12px; letter-spacing:0.1em; text-transform:uppercase;}
+  .navlinks a{opacity:0.75; transition:opacity .2s, color .2s; position:relative;}
+  .navlinks a:hover{opacity:1; color:var(--accent);}
+  .navlinks a:focus-visible, a:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  /* HERO */
+  .hero{
+    min-height:100svh;
+    display:flex; align-items:center;
+    padding:120px 0 60px;
+    position:relative;
+    background:var(--ink);
+  }
+  .hero-inner{
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px; align-items:center; width:100%;
+  }
+  .hero h1{
+    font-size:clamp(42px, 6.4vw, 88px);
+    line-height:0.98;
+    font-weight:700;
+    color:var(--paper-light);
+  }
+  .hero h1 span{color:var(--cream); display:block; font-weight:400; font-size:0.4em; letter-spacing:0.14em; margin-top:14px;}
+  .hero p.lede{
+    margin-top:26px; max-width:44ch; color:var(--cream-dim); font-size:15px; line-height:1.75;
+  }
+  .hero-cta{margin-top:36px; display:flex; gap:16px; flex-wrap:wrap; align-items:center;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:13px 22px; border:1.5px solid var(--cream); font-size:12px;
+    letter-spacing:0.12em; text-transform:uppercase; font-weight:600;
+    transition:background .2s, color .2s, transform .15s;
+    background:none; cursor:pointer;
+    font-family:'IBM Plex Mono', monospace; color:var(--cream);
+  }
+  .btn:hover{background:var(--cream); color:var(--ink); transform:translateY(-1px);}
+  .btn.ghost{border-color:var(--line-strong); color:var(--cream-dim);}
+  .btn.ghost:hover{background:transparent; color:var(--accent); border-color:var(--accent);}
+
+  /* PROP TAG (signature element) */
+  .tag-wrap{display:flex; justify-content:center; perspective:800px;}
+  .prop-tag{
+    width:270px;
+    background:var(--paper);
+    color:#382b18;
+    padding:26px 22px 30px;
+    position:relative;
+    box-shadow:0 24px 50px -18px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.3);
+    transform:rotate(4deg);
+    animation:sway 6s ease-in-out infinite;
+    transform-origin:top center;
+  }
+  @keyframes sway{
+    0%,100%{transform:rotate(4deg);}
+    50%{transform:rotate(1.2deg);}
+  }
+  .prop-tag::before{
+    content:""; position:absolute; top:-34px; left:50%; transform:translateX(-50%);
+    width:2px; height:36px; background:var(--cream-dim); opacity:0.55;
+  }
+  .prop-tag::after{
+    content:""; position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    width:14px; height:14px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #efe0b8, #a8925c 70%);
+    box-shadow:inset 0 0 0 3px var(--paper);
+  }
+  .prop-tag .tag-row{
+    display:flex; justify-content:space-between; font-size:10.5px; letter-spacing:0.08em;
+    text-transform:uppercase; border-bottom:1px dashed rgba(56,43,24,0.35);
+    padding:7px 0; font-weight:600;
+  }
+  .prop-tag .tag-row span:last-child{font-weight:400; font-family:'IBM Plex Mono';}
+  .prop-tag .tag-name{
+    font-family:'Oswald'; font-size:24px; font-weight:700; margin-top:18px; line-height:1.05;
+    text-transform:uppercase;
+  }
+  .prop-tag .tag-role{font-size:11px; letter-spacing:0.1em; text-transform:uppercase; margin-top:6px; opacity:0.75;}
+  .prop-tag .stamp{
+    position:absolute; bottom:16px; right:16px; width:52px; height:52px;
+    border:2px solid var(--accent); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--accent); font-family:'Oswald'; font-size:8.5px; font-weight:700;
+    letter-spacing:0.04em; text-align:center; transform:rotate(-14deg); opacity:0.85;
+  }
+
+  section{padding:110px 0;}
+  .section-head{margin-bottom:56px;}
+  .section-head h2{font-size:clamp(30px,4vw,46px); margin-top:14px; color:var(--paper-light); font-weight:600;}
+
+  /* BIO */
+  .bio-grid{display:grid; grid-template-columns:0.9fr 1.4fr; gap:60px; align-items:start;}
+  .profile-photo{
+    position:relative; width:100%; aspect-ratio:4/5; overflow:hidden;
+    border:1px solid var(--line-strong); margin-bottom:22px;
+  }
+  .profile-photo img{width:100%; height:100%; object-fit:cover; object-position:78% 30%; display:block; filter:grayscale(20%) contrast(1.05);}
+  .profile-photo::after{
+    content:""; position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    width:14px; height:14px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #efe0b8, #a8925c 70%);
+    box-shadow:0 2px 6px rgba(0,0,0,0.4);
+  }
+  .profile-photo .profile-cap{
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(180deg, transparent, rgba(0,0,0,0.8) 65%);
+    color:var(--paper-light); font-family:'Oswald'; font-size:12px; letter-spacing:0.1em;
+    text-transform:uppercase; padding:26px 14px 12px;
+  }
+  .presentation-note{
+    background:var(--ink-2); border-left:2px solid var(--accent); padding:16px 18px;
+    font-size:13.5px; color:var(--cream-dim); line-height:1.65; margin-bottom:0;
+  }
+  .index-card{
+    background:var(--ink-2); border:1px solid var(--line); padding:28px;
+    font-size:13.5px; color:var(--cream-dim); position:relative;
+  }
+  .index-card::before{
+    content:"FICHE TECHNIQUE"; position:absolute; top:-11px; left:20px; background:var(--ink);
+    padding:0 8px; font-family:'Oswald'; font-size:10px; letter-spacing:0.14em; color:var(--accent);
+  }
+  .index-card dl{display:grid; grid-template-columns:auto 1fr; gap:10px 16px; margin-top:6px;}
+  .index-card dt{color:var(--cream); font-weight:600; text-transform:uppercase; font-size:11px; letter-spacing:0.06em;}
+  .index-card dd{color:var(--cream-dim);}
+  .bio-text p{color:var(--cream-dim); margin-bottom:18px; font-size:15px; max-width:60ch;}
+  .bio-text strong{color:var(--paper-light); font-weight:600;}
+
+  /* FILMOGRAPHY */
+  .sheet{border-top:1px solid var(--line-strong);}
+  .sheet-row{
+    display:grid; grid-template-columns:64px 1.6fr 1fr 90px 1fr;
+    gap:18px; align-items:center;
+    padding:22px 0; border-bottom:1px solid var(--line);
+    transition:background .2s;
+  }
+  .sheet-row:hover{background:rgba(193,70,31,0.06);}
+  .sheet-head{
+    font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--cream-dim);
+    padding-bottom:12px; border-bottom:1px solid var(--line-strong);
+  }
+  .sheet-num{font-family:'Oswald'; font-size:20px; color:var(--accent); font-weight:600;}
+  .sheet-title{font-family:'Oswald'; font-size:19px; color:var(--paper-light); letter-spacing:0.01em;}
+  .sheet-title small{display:block; font-family:'IBM Plex Mono'; font-size:11.5px; color:var(--cream-dim); text-transform:none; letter-spacing:0; margin-top:3px;}
+  .sheet-meta{font-size:13px; color:var(--cream-dim);}
+  .placeholder-note{
+    margin-top:26px; font-size:12px; color:var(--cream-dim); font-style:italic;
+    border-left:2px solid var(--accent); padding-left:14px;
+  }
+
+  /* SKILLS */
+  .tag-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  .skill-tag{
+    background:var(--ink-2); border:1px solid var(--line); padding:22px 20px;
+    position:relative; transition:transform .2s, border-color .2s;
+  }
+  .skill-tag:hover{transform:translateY(-4px); border-color:var(--accent);}
+  .skill-tag .num{font-family:'Oswald'; color:var(--accent); font-size:12px; font-weight:600; letter-spacing:0.08em;}
+  .skill-tag h3{font-size:16px; margin-top:10px; color:var(--paper-light); font-weight:600; letter-spacing:0.01em;}
+  .skill-tag p{font-size:12.5px; color:var(--cream-dim); margin-top:8px; line-height:1.6;}
+
+  /* GALERIE — planche contact (photos) */
+  .filmstrip{
+    position:relative;
+    background:var(--ink-2);
+    border:1px solid var(--line-strong);
+    padding:26px 26px 30px;
+  }
+  .sprockets{
+    display:flex; justify-content:space-between; padding:0 6px 16px;
+  }
+  .sprockets span{
+    width:10px; height:7px; background:var(--ink); border:1px solid var(--line-strong); border-radius:1px;
+  }
+  .sprockets.bottom{padding:16px 6px 0;}
+  .photo-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+  }
+  .frame{
+    position:relative; aspect-ratio:4/5; background:var(--ink);
+    border:1px solid var(--line-strong); overflow:hidden; cursor:pointer;
+  }
+  .frame img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    filter:grayscale(35%) contrast(1.05); transition:filter .3s, transform .4s;
+  }
+  .frame:hover img{filter:grayscale(0%) contrast(1.05); transform:scale(1.04);}
+  .frame .frame-tag{
+    position:absolute; bottom:0; left:0; right:0;
+    background:linear-gradient(180deg, transparent, rgba(0,0,0,0.75) 60%);
+    color:var(--paper-light); font-family:'Oswald'; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; padding:18px 10px 8px;
+  }
+  .frame .frame-num{
+    position:absolute; top:6px; left:8px; font-family:'IBM Plex Mono'; font-size:10px;
+    color:var(--accent); background:rgba(21,23,26,0.7); padding:2px 5px;
+  }
+  .gallery-note{margin-top:22px; font-size:12px; color:var(--cream-dim); font-style:italic; border-left:2px solid var(--accent); padding-left:14px;}
+
+  /* DOCUMENTS */
+  .doc-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:22px;}
+  .doc-card{
+    background:var(--ink-2); border:1px solid var(--line); padding:26px;
+    display:flex; align-items:center; gap:18px;
+  }
+  .doc-icon{
+    flex:none; width:46px; height:56px; background:var(--paper);
+    position:relative; clip-path:polygon(0 0, 70% 0, 100% 30%, 100% 100%, 0 100%);
+  }
+  .doc-icon::after{
+    content:""; position:absolute; top:0; right:0; width:0; height:0;
+    border-style:solid; border-width:0 0 16px 16px; border-color:transparent transparent var(--ink-2) transparent;
+  }
+  .doc-info h3{font-size:14.5px; color:var(--paper-light); font-weight:600; letter-spacing:0.01em;}
+  .doc-info p{font-size:12px; color:var(--cream-dim); margin-top:4px;}
+  .doc-info a{
+    display:inline-block; margin-top:10px; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--accent); border-bottom:1px solid var(--accent); padding-bottom:2px;
+  }
+  .doc-info a:hover{color:var(--paper-light); border-color:var(--paper-light);}
+
+  /* GALERIE — rushes (vidéos) */
+  .rushes-head{display:flex; align-items:baseline; justify-content:space-between; margin:70px 0 26px; flex-wrap:wrap; gap:10px;}
+  .rushes-head h3{font-size:20px; color:var(--paper-light); font-weight:600;}
+  .rushes-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:22px;}
+  .rush-card{background:var(--ink-2); border:1px solid var(--line); overflow:hidden;}
+  .rush-media{position:relative; aspect-ratio:16/9; background:var(--ink); overflow:hidden;}
+  .rush-media video{width:100%; height:100%; object-fit:cover; display:block; background:var(--ink);}
+  .rush-slate{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 16px; border-top:1px dashed var(--line-strong);
+  }
+  .rush-slate .take-name{font-family:'Oswald'; font-size:13.5px; color:var(--paper-light); letter-spacing:0.02em; text-transform:uppercase;}
+  .rush-slate .take-meta{font-size:11px; color:var(--cream-dim); letter-spacing:0.04em;}
+
+  /* LIGHTBOX */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(10,11,13,0.94); z-index:300;
+    display:none; align-items:center; justify-content:center; padding:40px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:90vw; max-height:85vh; border:1px solid var(--line-strong); object-fit:contain;}
+  .lightbox-close{
+    position:absolute; top:26px; right:32px; color:var(--cream); font-family:'Oswald'; font-size:12px;
+    letter-spacing:0.12em; text-transform:uppercase; border:1px solid var(--line-strong); padding:9px 16px;
+    background:none; cursor:pointer;
+  }
+  .lightbox-close:hover{border-color:var(--accent); color:var(--accent);}
+
+  /* CONTACT */
+  .contact-sheet{
+    background:var(--ink-2); border:1px solid var(--line-strong); padding:48px;
+    display:grid; grid-template-columns:1fr 1fr; gap:40px;
+  }
+  .contact-sheet .eyebrow{margin-bottom:16px;}
+  .contact-list{list-style:none;}
+  .contact-list li{
+    display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px dashed var(--line);
+    font-size:14px;
+  }
+  .contact-list li span:first-child{color:var(--cream-dim); text-transform:uppercase; font-size:11px; letter-spacing:0.08em;}
+  .contact-list li a, .contact-list li span:last-child{color:var(--paper-light);}
+  .contact-list li a:hover{color:var(--accent);}
+  .contact-copy p{color:var(--cream-dim); margin-bottom:22px; max-width:42ch;}
+
+  footer{
+    padding:36px 0; text-align:center; font-size:11px; letter-spacing:0.08em;
+    color:var(--cream-dim); border-top:1px solid var(--line); text-transform:uppercase;
+  }
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .prop-tag{animation:none;}
+    .reveal{transition:none; opacity:1; transform:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  @media (max-width:900px){
+    .hero-inner{grid-template-columns:1fr; text-align:left;}
+    .tag-wrap{margin-top:50px;}
+    .bio-grid{grid-template-columns:1fr;}
+    .tag-grid{grid-template-columns:1fr 1fr;}
+    .contact-sheet{grid-template-columns:1fr;}
+    .sheet-row{grid-template-columns:36px 1fr; row-gap:6px;}
+    .sheet-meta:nth-child(4){display:none;}
+    .navlinks{display:none;}
+    .photo-grid{grid-template-columns:repeat(2,1fr);}
+    .rushes-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:560px){
+    .tag-grid{grid-template-columns:1fr;}
+    .wrap{padding:0 20px;}
+    .contact-sheet{padding:28px;}
+    .photo-grid{grid-template-columns:1fr 1fr;}
+    .rushes-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><span class="slate"></span> BILAL — ACCESSOIRISTE</div>
+    <div class="navlinks">
+      <a href="#profil">Profil</a>
+      <a href="#filmo">Filmographie</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#competences">Compétences</a>
+      <a href="#documents">Documents</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow">Département accessoires</div>
+      <h1>Bilal<span>Accessoiriste — Cinéma &amp; Audiovisuel</span></h1>
+      <p class="lede">Je conçois, recherche et assure la continuité des accessoires sur les tournages — du script au plateau, jusqu'à la dernière prise.</p>
+      <div class="hero-cta">
+        <a class="btn" href="#contact">Me contacter</a>
+        <a class="btn ghost" href="#galerie">Voir la galerie</a>
+      </div>
+    </div>
+    <div class="tag-wrap">
+      <div class="prop-tag">
+        <div class="tag-row"><span>Dépt.</span><span>Accessoires</span></div>
+        <div class="tag-row"><span>Poste</span><span>Accessoiriste</span></div>
+        <div class="tag-row"><span>Statut</span><span>Disponible</span></div>
+        <div class="tag-name">Bilal</div>
+        <div class="tag-role">Continuité &amp</div>
+        <div class="stamp">VU EN<br>CONTINUITÉ</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="profil">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Profil</div>
+      <h2>Le métier, en détail</h2>
+    </div>
+    <div class="bio-grid">
+      <div class="reveal">
+        <div class="profile-photo">
+          <img src="photos/profil.jpg" alt="Bilal, accessoiriste">
+          <div class="profile-cap">Bilal</div>
+        </div>
+        <p class="presentation-note">Je réponds au nom de Bilal KUNTA, étudiant ciné-banlieue 17e promo, Accessoiriste de plateau, scénariste et concepteur de dossier de spectacle de théâtre.</p>
+        <div class="index-card" style="margin-top:22px;">
+        <dl>
+          <dt>Rôle</dt><dd>Accessoiriste</dd>
+          <dt>Secteur</dt><dd>Cinéma,Long métrage, court métrage, série, publicité</dd>
+          <dt>Missions</dt><dd>Recherche, fabrication, continuité, régie plateau</dd>
+          <dt>Zone</dt><dd>Disponible en déplacement</dd>
+          <dt>Statut</dt><dd>Intermittent</dd>
+        </dl>
+        </div>
+      </div>
+      <div class="bio-text reveal">
+        <p>Sur un tournage, l'accessoiriste est responsable de <strong>tout ce que les comédiens touchent, portent ou manipulent</strong> à l'écran — des objets personnels aux armes de scène, en passant par le mobilier de poche et les faux papiers.</p>
+        <p>Mon travail commence à la lecture du scénario : décortiquer chaque scène, lister les besoins, proposer des pistes au chef décorateur et au réalisateur. Il se poursuit en préparation — sourcing, achats, fabrication, vieillissement — puis sur le plateau, où la <strong>continuité</strong> devient la priorité absolue : chaque objet, chaque position, chaque état d'usure doit rester identique d'une prise à l'autre, parfois à plusieurs semaines d'intervalle.</p>
+        <p>J'aime ce métier pour son mélange d'artisanat, de rigueur logistique et de sens du détail — un bon accessoire ne se remarque jamais, mais son absence se voit immédiatement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="filmo" style="background:var(--ink-2);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Filmographie</div>
+      <h2>Feuille de service</h2>
+    </div>
+    <div class="sheet reveal">
+      <div class="sheet-row sheet-head">
+        <div>N°</div><div>Titre</div><div>Réalisation</div><div>Année</div><div>Poste</div>
+      </div>
+      <div class="sheet-row">
+        <div class="sheet-num">01</div>
+        <div class="sheet-title">WEERUWAAY<small>Court métrage — fiction</small></div>
+        <div class="sheet-meta">MAKHFOUSS THIAM</div>
+        <div class="sheet-meta">2026</div>
+        <div class="sheet-meta">Accessoiriste</div>
+      </div>
+      <div class="sheet-row">
+        <div class="sheet-num">02</div>
+        <div class="sheet-title">KALISTA<small>Série TV — saison 1</small></div>
+        <div class="sheet-meta">BABACAR NIANG</div>
+        <div class="sheet-meta">2024</div>
+        <div class="sheet-meta">Stagiaire accessoiriste</div>
+      </div>
+      <div class="sheet-row">
+        <div class="sheet-num">03</div>
+        <div class="sheet-title">SUNU BANK, ORANGE BANK, BNDE, ORANGE MONEY, IVO, MON CHOCO, 40 ANS SONATEL, BIS, MONARCH<small>Publicités</small></div>
+        <div class="sheet-meta">---</div>
+        <div class="sheet-meta">2025, 2026</div>
+        <div class="sheet-meta">Accessoiriste</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="galerie">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Galerie</div>
+      <h2>Planche contact &amp; rushes</h2>
+    </div>
+
+    <div class="filmstrip reveal">
+      <div class="sprockets">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="photo-grid" id="photoGrid">
+        <div class="frame" data-full="photos/table-accessoires.jpg">
+          <span class="frame-num">24A</span>
+          <img src="photos/table-accessoires.jpg" alt="Table d'accessoires préparée pour la continuité">
+          <div class="frame-tag">Accessoires</div>
+        </div>
+        <div class="frame" data-full="photos/tournage-exterieur.jpg">
+          <span class="frame-num">24B</span>
+          <img src="photos/tournage-exterieur.jpg" alt="Tournage extérieur, jour 1">
+          <div class="frame-tag">Tournage</div>
+        </div>
+        <div class="frame" data-full="photos/decor-installation.jpg">
+          <span class="frame-num">25A</span>
+          <img src="photos/decor-installation.jpg" alt="Installation d'un décor sur le plateau">
+          <div class="frame-tag">Décor</div>
+        </div>
+        <div class="frame" data-full="photos/table-preparation.jpg">
+          <span class="frame-num">25B</span>
+          <img src="photos/table-preparation.jpg" alt="Table d'accessoires pour publicité, mise en scène produit">
+          <div class="frame-tag">Préparation</div>
+        </div>
+        <div class="frame" data-full="photos/scene-plateau.jpg">
+          <span class="frame-num">26A</span>
+          <img src="photos/scene-plateau.jpg" alt="Scène en cours de tournage">
+          <div class="frame-tag">Plateau</div>
+        </div>
+        <div class="frame" data-full="photos/portrait-plateau.jpg">
+          <span class="frame-num">26B</span>
+          <img src="photos/portrait-plateau.jpg" alt="Portrait sur le plateau">
+          <div class="frame-tag">Équipe</div>
+        </div>
+        <div class="frame" data-full="photos/portrait-veste.jpg">
+          <span class="frame-num">27A</span>
+          <img src="photos/portrait-veste.jpg" alt="Portrait de Bilal">
+          <div class="frame-tag">Portrait</div>
+        </div>
+        <div class="frame" data-full="photos/echange-plateau.jpg">
+          <span class="frame-num">27B</span>
+          <img src="photos/echange-plateau.jpg" alt="Échange d'accessoire sur le plateau">
+          <div class="frame-tag">Régie</div>
+        </div>
+        <div class="frame" data-full="photos/equipe-rue.jpg">
+          <span class="frame-num">28A</span>
+          <img src="photos/equipe-rue.jpg" alt="L'équipe en repérage">
+          <div class="frame-tag">Équipe</div>
+        </div>
+        <div class="frame" data-full="photos/pause-preparation.jpg">
+          <span class="frame-num">28B</span>
+          <img src="photos/pause-preparation.jpg" alt="Pause avant tournage, planche de références">
+          <div class="frame-tag">Préparation</div>
+        </div>
+        <div class="frame" data-full="photos/citation-tshirt.jpg">
+          <span class="frame-num">29A</span>
+          <img src="photos/citation-tshirt.jpg" alt="Citation de Bilal Kunta sur le cinéma">
+          <div class="frame-tag">Signature</div>
+        </div>
+      </div>
+      <div class="sprockets bottom">
+        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <p class="gallery-note">Ce sont déjà tes vraies photos. Pour en ajouter d'autres, dépose-les dans le dossier <code>photos/</code> et copie un bloc <code>div.frame</code> existant en changeant le <code>src</code>.</p>
+
+    <div class="rushes-head reveal">
+      <div class="eyebrow" style="margin-bottom:0;">Rushes</div>
+      <h3>Extraits vidéo</h3>
+    </div>
+    <div class="rushes-grid reveal">
+      <div class="rush-card">
+        <div class="rush-media" style="aspect-ratio:9/16; max-width:280px; margin:0 auto;">
+          <video controls preload="none" poster="videos/extrait-01-poster.jpg">
+            <source src="videos/extrait-01.mp4" type="video/mp4">
+            Ton navigateur ne supporte pas la lecture vidéo.
+          </video>
+        </div>
+        <div class="rush-slate">
+          <span class="take-name">Making-of</span>
+          <span class="take-meta">Take 01</span>
+        </div>
+      </div>
+      <div class="rush-card">
+        <div class="rush-media" style="aspect-ratio:9/16; max-width:280px; margin:0 auto;">
+          <video controls preload="none" poster="videos/extrait-02-poster.jpg">
+            <source src="videos/extrait-02.mp4" type="video/mp4">
+            Ton navigateur ne supporte pas la lecture vidéo.
+          </video>
+        </div>
+        <div class="rush-slate">
+          <span class="take-name">Métier d'accessoiriste</span>
+          <span class="take-meta">Take 02</span>
+        </div>
+      </div>
+      <div class="rush-card">
+        <div class="rush-media">
+          <video controls preload="none" poster="videos/extrait-03-poster.jpg">
+            <source src="videos/extrait-03.mp4" type="video/mp4">
+            Ton navigateur ne supporte pas la lecture vidéo.
+          </video>
+        </div>
+        <div class="rush-slate">
+          <span class="take-name">Sur le tournage</span>
+          <span class="take-meta">Take 03</span>
+        </div>
+      </div>
+      <div class="rush-card">
+        <div class="rush-media">
+          <video controls preload="none" poster="videos/extrait-04-poster.jpg">
+            <source src="videos/extrait-04.mp4" type="video/mp4">
+            Ton navigateur ne supporte pas la lecture vidéo.
+          </video>
+        </div>
+        <div class="rush-slate">
+          <span class="take-name">Extrait plateau</span>
+          <span class="take-meta">Take 04</span>
+        </div>
+      </div>
+      <div class="rush-card">
+        <div class="rush-media">
+          <video controls preload="none" poster="videos/extrait-05-poster.jpg">
+            <source src="videos/extrait-05.mp4" type="video/mp4">
+            Ton navigateur ne supporte pas la lecture vidéo.
+          </video>
+        </div>
+        <div class="rush-slate">
+          <span class="take-name">Présentation — 2 min</span>
+          <span class="take-meta">Take 05</span>
+        </div>
+      </div>
+    </div>
+    <p class="gallery-note">Ce sont déjà tes vraies vidéos. Pour en ajouter d'autres, dépose-les dans le dossier <code>videos/</code> et copie un bloc <code>div.rush-card</code> existant en changeant le <code>src</code>.</p></p>
+  </div>
+</section>
+
+<section id="competences" style="background:var(--ink-2);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Compétences</div>
+      <h2>Spécialités d'accessoires</h2>
+    </div>
+    <div class="tag-grid reveal">
+      <div class="skill-tag">
+        <div class="num">01</div>
+        <h3>Armes de scène</h3>
+        <p>Gestion, entretien et sécurité des armes factices et à blanc.</p>
+      </div>
+      <div class="skill-tag">
+        <div class="num">02</div>
+        <h3>Objets d'époque</h3>
+        <p>Recherche et vieillissement pour reconstitutions historiques.</p>
+      </div>
+      <div class="skill-tag">
+        <div class="num">03</div>
+        <h3>Accessoires personnages</h3>
+        <p>Objets personnels liés au jeu et à la caractérisation.</p>
+      </div>
+      <div class="skill-tag">
+        <div class="num">04</div>
+        <h3>Mobilier de poche</h3>
+        <p>Petit mobilier et objets de décor manipulés en scène.</p>
+      </div>
+      <div class="skill-tag">
+        <div class="num">05</div>
+        <h3>Continuité plateau</h3>
+        <p>Suivi photo et fiche par scène pour garantir le raccord.</p>
+      </div>
+      <div class="skill-tag">
+        <div class="num">06</div>
+        <h3>Fabrication &amp; Gestion accessoire</h3>
+        <p>Adaptation,fabrication d'accessoires sur mesure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="documents" style="background:var(--ink-2);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Documents</div>
+      <h2>CV &amp; Portfolio</h2>
+    </div>
+    <div class="doc-grid reveal">
+      <div class="doc-card">
+        <div class="doc-icon"></div>
+        <div class="doc-info">
+          <h3>CV — Accessoiriste</h3>
+          <p>Expériences, formation et compétences.</p>
+          <a href="documents/CV-Bilal-Kounta.pdf" target="_blank" rel="noopener">Consulter en ligne</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-icon"></div>
+        <div class="doc-info">
+          <h3>Portfolio</h3>
+          <p>Réalisations, approche artistique et univers.</p>
+          <a href="documents/Portfolio-Bilal-Kounta.pdf" target="_blank" rel="noopener">Consulter en ligne</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-icon"></div>
+        <div class="doc-info">
+          <h3>Cours — École Ciné-Banlieue</h3>
+          <p>Notes de formation aux métiers du cinéma.</p>
+          <a href="documents/cours-ecole-cine-banlieue.pdf" target="_blank" rel="noopener">Consulter en ligne</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-icon"></div>
+        <div class="doc-info">
+          <h3>Vocabulaire du cinéma</h3>
+          <p>Lexique des termes techniques du plateau.</p>
+          <a href="documents/vocabulaire-du-cinema.pdf" target="_blank" rel="noopener">Consulter en ligne</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-icon"></div>
+        <div class="doc-info">
+          <h3>Résumé — Cours de scénario</h3>
+          <p>Bases de la construction et de l'écriture scénaristique.</p>
+          <a href="documents/resume-cours-scenario.pdf" target="_blank" rel="noopener">Consulter en ligne</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-icon"></div>
+        <div class="doc-info">
+          <h3>Moodboard — Mon Choco</h3>
+          <p>Dépouillement et moodboards accessoires pour la publicité.</p>
+          <a href="documents/Moodboard-Mon-Choco.pdf" target="_blank" rel="noopener">Consulter en ligne</a>
+        </div>
+      </div>
+      <div class="doc-card">
+        <div class="doc-icon"></div>
+        <div class="doc-info">
+          <h3>Moodboard — Sendwave</h3>
+          <p>Recherche visuelle et intentions d'accessoires.</p>
+          <a href="documents/Moodboard-Sendwave.pdf" target="_blank" rel="noopener">Consulter en ligne</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-sheet reveal">
+      <div class="contact-copy">
+        <div class="eyebrow">Contact</div>
+        <h2 style="font-size:32px; color:var(--paper-light); margin-bottom:16px;">Prêt pour le prochain tournage</h2>
+        <p>Disponible pour longs métrages, Court métrage, séries et publicités. Discutons là sus, Envoyez-moi le scénario ou le planning de préparation.</p>
+        <a class="btn" href="mailto:Bilalkountasy77@gmail.com">Écrire un email</a>
+      </div>
+      <ul class="contact-list">
+        <li><span>Email</span><a href="mailto:Bilalkountasy77@gmail.com">Bilalkountasy77@gmail.com</a></li>
+        <li><span>Téléphone</span><span>+221 76 353 22 71</span></li>
+        <li><span>Localisation</span><span>Dakar, Sénégal</span></li>
+        <li><span>Portfolio</span><span>Sur demande</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>Bilal — Accessoiriste Cinéma · © 2026</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">Fermer ✕</button>
+  <img id="lightboxImg" src="" alt="Photo agrandie">
+</div>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:0.12});
+  reveals.forEach(el=>io.observe(el));
+
+  // Lightbox pour la galerie photo
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  document.querySelectorAll('.frame').forEach(frame=>{
+    frame.addEventListener('click', ()=>{
+      const full = frame.getAttribute('data-full') || frame.querySelector('img').src;
+      lightboxImg.src = full;
+      lightbox.classList.add('open');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', ()=> lightbox.classList.remove('open'));
+  lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) lightbox.classList.remove('open'); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') lightbox.classList.remove('open'); });
+</script>
+
+</body>
+</html>
